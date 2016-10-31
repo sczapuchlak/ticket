@@ -23,6 +23,8 @@ public class Ticket {
         this.ticketID = staticTicketIDCounter;
         staticTicketIDCounter++;
     }
+    protected String getDescription() {
+        return description;}
 
     protected int getPriority() {
         return priority;

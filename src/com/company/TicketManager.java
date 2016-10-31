@@ -1,18 +1,25 @@
 package com.company;
-
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.util.Scanner;
 import java.util.*;
+
 
 public class TicketManager {
 
-    public static void main(String[] args) {
-
-        LinkedList<Ticket> ticketQueue = new LinkedList<Ticket>();
+    public static void main(String[] args)throws Exception {
 
         Scanner scan = new Scanner(System.in);
+        LinkedList<Ticket> ticketQueue = new LinkedList<Ticket>();
+        BufferedWriter writer1 = new BufferedWriter(new FileWriter("tickets.txt", true)
+        LinkedList<Ticket> resolvedTickets = new LinkedList<>();
+
+
 
         while(true){
 
-            System.out.println("1. Enter Ticket\n2. Delete Ticket\n3. Display All Tickets\n4. Quit");
+            System.out.println("1. Enter Ticket\n2. Delete by ID\n3. Delete by Issue" +
+                    "\n4.Search by Name \n5.Display All Tickets\n6. Quit");
             int task = Integer.parseInt(scan.nextLine());
 
             if (task == 1) {
@@ -21,16 +28,19 @@ public class TicketManager {
 
             } else if (task == 2) {
                 //delete a ticket
-                deleteTicket(ticketQueue);
-
-            } else if ( task == 4 ) {
+                deleteTicket(ticketQueue, resolvedTickets);
+            }else if (task==3) {
+                searchTicketDescription(ticketQueue);
+                deleteTicket(ticketQueue, resolvedTickets);
+            }else if (task==4){
+                searchTicketDescription(ticketQueue);
+            } else if ( task == 6 ) {
                 //Quit. Future prototype may want to save all tickets to a file
                 System.out.println("Quitting program");
                 break;
             }
             else {
-                //this will happen for 3 or any other selection that is a valid int
-                //TODO Program crashes if you enter anything else - please fix
+                //this will happen for 5 or any other selection that is a valid int
                 //Default will be print all tickets
                 printAllTickets(ticketQueue);
             }
@@ -63,8 +73,9 @@ public class TicketManager {
             }
         }
         if (!found) {
-            System.out.println("Ticket ID not found, no ticket deleted");
-            //TODO – re-write this method to ask for ID again if not found
+            System.out.println("Ticket ID not found, no ticket deleted.Please enter a valid" +
+                    "Ticket ID.");
+
         }
         printAllTickets(ticketQueue);  //print updated list
 
@@ -140,5 +151,18 @@ public class TicketManager {
         System.out.println(" ------- End of ticket list ----------");
 
     }
+    //gets user decription to search tickets to find what the user was looking for
+    private static void searchTicketDescription(LinkedList<Ticket> ticketQueue) {
+        ArrayList<Ticket> ticketSearchResults = new ArrayList<>();
+        System.out.println("What are you looking for?");
+        String searchString = scanner.nextLine();
+        for (Ticket t : ticketQueue) {
+            if (t.getDescription().contains(searchString)) {
+                ticketSearchResults.add(t);
+            }
+        }
+        System.out.println("Here are the tickets that were located:\n" + ticketSearchResults);
+    }
+
 }
 
